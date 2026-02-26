@@ -1,17 +1,19 @@
 # .NET Opdracht ChipSoft
 
-## Gebruik
-1. Start de applicatie
-2. Ga naar <http://localhost:5216/swagger>
-3. Ziekenhuis A kan via de`[POST] /institutions/{id}/referrals`-endpoint een verwijzing naar verpleeghuis B sturen. De request body bevat de benodigde informatie en de verwijsbrief.
-4. De verwijzing kan worden opgehaald via de `[GET] /institutions/{id}/referrals`-endpoint, dat de door deze instelling ontvangen verwijzingen laat zien.
-5. Verpleeghuis B kan vervolgens de medicatielijst uit het patiëntendossier opvragen via de `[GET] /patients/{id}/medications`-endpoint.
+## Instructies
 
-## Ontwerp
-- De applicatie is gebouwd met Dependency Injection, zodat de mockservices in de toekomst eenvoudig kunnen worden vervangen door echte implementaties.
-- De applicatie slaat de gegevens momenteel in-memory op, maar integratie met een database is eenvoudig mogelijk door eerdergenoemde Dependency Injection.
-- Het `ReferralResource`-model wordt gebruikt om de inkomende verwijzing te representeren, zodat er geen overbodige informatie hoeft te worden gespecificeerd en de verwijzingsbrief kan worden meegezonden.
-- Swagger-middleware wordt gebruikt om interactieve documentatie van de API te bieden, wat het testen vereenvoudigt en een visuele weergave van de beschikbare endpoints mogelijk maakt.
-- De services en controllers van de applicatie zijn ontworpen met separation of concerns in gedachten, waarbij elk onderdeel verantwoordelijk is voor één aspect van de functionaliteit van de applicatie.
-- Expliciete foutafhandeling was niet nodig, aangezien de ingebouwde foutafhandeling van ASP.NET Core exceptions netjes afhandelt en geen gevoelige log-informatie blootlegt wanneer de applicatie in een production-environment wordt uitgevoerd.
-- Data-annotaties worden gebruikt voor modelvalidatie, zodat data die door de applicatie gaat, voldoet aan de verwachte restricties.
+1. Start de applicatie
+2. Navigeer naar <http://localhost:5216/swagger>
+3. Ziekenhuis A verstuurt een verwijzing via `[POST] /institutions/{id}/referrals` naar verpleeghuis B. De request body bevat de benodigde informatie en de verwijsbrief.
+4. De verwijzing wordt opgehaald via `[GET] /institutions/{id}/referrals`, dat de door deze instelling ontvangen verwijzingen laat zien.
+5. Verpleeghuis B vraagt aanvullende medicatiegegevens van het patiëntendossier op via `[GET] /patients/{id}/medications`.
+
+## Design
+
+- De applicatie is voorbereid op schaalbaarheid. Mock-services kunnen middels dependency injection eenvoudig worden vervangen door echte implementaties. Zoals bijvoorbeeld de in-memory mock-database.
+- Elke keer dat gegevens worden gelezen of uitgewisseld, wordt dit gelogd om zo een logboek te creëren van wanneer er wat is gebeurd.
+- Er wordt gebruikgemaakt van een `Resource`-model om de inkomende gegevens te representeren. Dit voorkomt dat er overbodige informatie moet worden gespecificeerd en maakt het mogelijk om de verwijsbrief mee te sturen.
+- Swagger-middleware is geïntegreerd voor een interactieve API-documentatie, wat zowel het testen als het overzicht van de endpoints bevordert.
+- De applicatie is ontworpen met separation of concerns als uitgangspunt, waarbij controllers en services strikt gescheiden verantwoordelijkheden hebben.
+- Voor de foutafhandeling is vertrouwd op de ingebouwde middleware van ASP.NET Core. Deze is getest en handelt exceptions netjes af en zorgt ervoor dat er in de productieomgeving geen gevoelige stacktraces of log-informatie naar de eindgebruiker lekt
+- Data-annotaties worden gebruikt voor modelvalidatie, zodat gegarandeerd is dat alle data die de applicatie verwerkt voldoet aan de verwachte restricties.
