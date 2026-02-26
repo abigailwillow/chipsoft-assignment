@@ -6,6 +6,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IDatabaseService, MockDatabaseService>();
+builder.Services.AddSingleton<IFileStorageService, MockFileStorageService>();
+builder.Services.AddSingleton<IReferralService, ReferralService>();
 
 var app = builder.Build();
 
